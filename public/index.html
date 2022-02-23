@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <body>
 
-<h2>HTML Forms</h2>
+  <h2>HTML Forms</h2>
 
-<form action="/action_page.php">
-  <label for="fname">First name:</label><br>
-  <input type="text" id="fname" name="fname" value="John"><br>
-  <label for="lname">Last name:</label><br>
-  <input type="text" id="lname" name="lname" value="Doe"><br><br>
-  <input type="submit" value="Submit">
-</form> 
+  <button onclick="send()">send</button>
 
-<p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+  <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
 
 </body>
-</html>
+<script>
+  function send() {
+    var instance = axios.create({
+      baseURL: 'http://localhost:3000/'
+    });
+    instance.get('/home').then(function (response) {
+      console.log(response);
+      window.location = response.data;
+    })
+  }
+</script>
 
+</html>

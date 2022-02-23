@@ -139,9 +139,10 @@ var createPaymentRequest = (transaction) => {
 
   var secureCode = []
   Object.keys(paymentRequestQuery)
+    .sort()
     .forEach(key => {
       paymentRequestURL.searchParams.append(key, paymentRequestQuery[key]);
-      if (key.substr(0,4) === 'vpc_') {
+      if (key.substr(0, 4) === 'vpc_') {
         secureCode.push(`${key}=${paymentRequestQuery[key]}`);
       }
     });
@@ -150,6 +151,7 @@ var createPaymentRequest = (transaction) => {
   return paymentRequestURL;
 }
 
+const now = new Date();
 var paymentRequest = createPaymentRequest(new Transaction({
   paymentGateway: {
     version: 2,
@@ -166,20 +168,19 @@ var paymentRequest = createPaymentRequest(new Transaction({
     customerId: '123',
     customerEmail: "vnu",
   },
-  orderInfo: "pay fordsfdsf st",
+  orderInfo: `node-${now.toISOString()}`,
   amount: "20000",
-  title: "pay forsdfsdf me",
-  transactionCode: "node-321hbsdfsdfhbjhbjhbhbjhb321-020321Z",
+  title: "payme",
+  transactionCode: `node-${now.toISOString()}`,
   currency: "VND",
   locale: "vn",
   ticketNo: '::1',
-  againLink: "http://localhost:8080/",
+  againLink: "http://127.0.0.1:5500/public/index.html",
   returnURL: "http://localhost:8080/payment/onepaydom/callback"
 }));
 
 router.get('/home', function (req, res, next) {
-  console.log(req.header('x-forwarded-for'));
-  res.redirect(paymentRequest.href);
+  res.send(paymentRequest.href);
 });
 
 module.exports = router;
